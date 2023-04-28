@@ -1,7 +1,9 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://Assets/skin.material" type="Material" id=1]
 [ext_resource path="res://Assets/skaterFemaleA.png" type="Texture" id=2]
+[ext_resource path="res://Assets/blasterH.glb" type="PackedScene" id=3]
+[ext_resource path="res://Player/Player.gd" type="Script" id=4]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.5
@@ -4637,17 +4639,18 @@ animation = "Idle"
 animation = "Run"
 
 [sub_resource type="AnimationNodeBlendTree" id=22]
-graph_offset = Vector2( -151.35, 65.4075 )
+graph_offset = Vector2( -247.392, -11.1451 )
 nodes/Idle/node = SubResource( 19 )
 nodes/Idle/position = Vector2( 130, 70 )
 nodes/Idle_Run/node = SubResource( 20 )
-nodes/Idle_Run/position = Vector2( 470, 100 )
+nodes/Idle_Run/position = Vector2( 440, 100 )
 nodes/Run/node = SubResource( 21 )
 nodes/Run/position = Vector2( 130, 210 )
 nodes/output/position = Vector2( 760, 150 )
 node_connections = [ "output", 0, "Idle_Run", "Idle_Run", 0, "Idle", "Idle_Run", 1, "Run" ]
 
 [node name="Player" type="KinematicBody"]
+script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 1.92101, 0.21824 )
@@ -4886,6 +4889,13 @@ bones/44/bound_children = [  ]
 mesh = SubResource( 2 )
 skin = SubResource( 3 )
 material/0 = SubResource( 4 )
+
+[node name="BoneAttachment" type="BoneAttachment" parent="Root/Skeleton"]
+transform = Transform( -0.816767, 0.131016, 0.561905, 0.437282, -0.494785, 0.750985, 0.37641, 0.859081, 0.346832, -0.661725, 1.3332, 0.227672 )
+bone_name = "right_hand_thumb_1"
+
+[node name="blasterH" parent="Root/Skeleton/BoneAttachment" instance=ExtResource( 3 )]
+transform = Transform( -1.332, 0.670935, -0.16011, 0.355209, 0.965657, 1.09148, 0.591283, 0.931317, -1.01638, -0.0472353, 0.314907, -0.200195 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Attack = SubResource( 5 )
