@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Assets/pink.material" type="Material" id=1]
+[ext_resource path="res://Assets/Models/GLTF format/pink.material" type="Material" id=1]
 [ext_resource path="res://Assets/darkMetal.material" type="Material" id=2]
 [ext_resource path="res://Assets/_defaultMat.material" type="Material" id=3]
 [ext_resource path="res://Target/targetA.gd" type="Script" id=4]
@@ -14,7 +14,6 @@ surfaces/0 = {
 "blend_shape_data": [  ],
 "format": 2194711,
 "index_count": 432,
-"material": ExtResource( 1 ),
 "primitive": 4,
 "skeleton_aabb": [  ],
 "vertex_count": 424
@@ -52,6 +51,7 @@ script = ExtResource( 4 )
 
 [node name="targetA" type="MeshInstance" parent="."]
 mesh = SubResource( 1 )
+material/0 = ExtResource( 1 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 2 )

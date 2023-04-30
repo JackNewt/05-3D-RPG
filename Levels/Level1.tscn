@@ -1,9 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Levels/lowpoly_scene.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Target/targetA.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Player/RayCast.gd" type="Script" id=4]
+[ext_resource path="res://NPC/NPC.tscn" type="PackedScene" id=5]
+[ext_resource path="res://NPC/NPC.gd" type="Script" id=6]
+[ext_resource path="res://UI/Dialogue.gd" type="Script" id=7]
+[ext_resource path="res://UI/UI.gd" type="Script" id=8]
+[ext_resource path="res://NPC/Drone.tscn" type="PackedScene" id=9]
 
 [sub_resource type="SpatialMaterial" id=3]
 albedo_color = Color( 0.611765, 0.654902, 0.403922, 1 )
@@ -27,6 +32,10 @@ emission_on_uv2 = false
 material = SubResource( 4 )
 radius = 0.5
 height = 1.0
+
+[sub_resource type="CapsuleShape" id=6]
+radius = 2.83311
+height = 2.47146
 
 [node name="Game" type="Spatial"]
 
@@ -64,6 +73,7 @@ mesh = SubResource( 5 )
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 1.69587, 0 )
 
 [node name="target_container" type="Spatial" parent="."]
+visible = false
 
 [node name="targetA" parent="target_container" instance=ExtResource( 3 )]
 transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, -4.02047, 4.84912, -2.69497 )
@@ -73,3 +83,76 @@ transform = Transform( 2.13177, 0, -2.11082, 0, 3, 0, 2.11082, 0, 2.13177, -2.36
 
 [node name="targetA3" parent="target_container" instance=ExtResource( 3 )]
 transform = Transform( -2.24023, 0, -1.99534, 0, 3, 0, 1.99534, 0, -2.24023, -6.13099, 8.64987, -43.669 )
+
+[node name="targetA4" parent="target_container" instance=ExtResource( 3 )]
+transform = Transform( 2.87908, 0, -0.843157, 0, 3, 0, 0.843157, 0, 2.87908, -65.2542, 8.64987, -65.6485 )
+
+[node name="NPC" parent="." instance=ExtResource( 5 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.0429, 1.98285, -10.2242 )
+script = ExtResource( 6 )
+
+[node name="Area" type="Area" parent="NPC"]
+
+[node name="CollisionShape" type="CollisionShape" parent="NPC/Area"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.81204, 0 )
+shape = SubResource( 6 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource( 8 )
+
+[node name="Damage" type="ColorRect" parent="UI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 0, 0, 0 )
+
+[node name="Background" type="ColorRect" parent="UI"]
+anchor_right = 1.0
+margin_bottom = 30.0
+color = Color( 0, 0, 0, 0.501961 )
+
+[node name="Score" type="Label" parent="UI"]
+margin_left = 10.0
+margin_right = 310.0
+margin_bottom = 30.0
+text = "Score:"
+valign = 1
+
+[node name="Time" type="Label" parent="UI"]
+margin_left = 512.0
+margin_right = 1014.0
+margin_bottom = 30.0
+text = "Timer:"
+align = 2
+valign = 1
+
+[node name="Timer" type="Timer" parent="UI"]
+
+[node name="Dialogue" type="Control" parent="UI"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 7 )
+
+[node name="Background" type="ColorRect" parent="UI/Dialogue"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -30.0
+color = Color( 0, 0, 0, 0.501961 )
+
+[node name="Text" type="RichTextLabel" parent="UI/Dialogue"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -22.0
+margin_bottom = 8.0
+bbcode_enabled = true
+bbcode_text = "[center]Hello[/center]"
+text = "Hello"
+
+[node name="Drone" parent="." groups=["target"] instance=ExtResource( 9 )]
+transform = Transform( -1, 0, 8.9407e-08, 0, 1, 0, -8.9407e-08, 0, -1, -61.2658, 24.5935, -85.2823 )
+
+[connection signal="body_entered" from="NPC/Area" to="NPC" method="_on_Area_body_entered"]
+[connection signal="body_exited" from="NPC/Area" to="NPC" method="_on_Area_body_exited"]
+[connection signal="timeout" from="UI/Timer" to="UI" method="_on_Timer_timeout"]
